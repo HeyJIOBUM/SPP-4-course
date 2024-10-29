@@ -31,7 +31,7 @@ public class HeadUtilityTest {
                 "Hello World,",
                 "I am java."
         );
-        List<String> receivedLines = HeadUtility.head("head n -2 " + path);
+        List<String> receivedLines = HeadUtility.head("head -n 2 " + path);
 
         Assertions.assertEquals(expectedLines, receivedLines);
     }
@@ -51,7 +51,7 @@ public class HeadUtilityTest {
                 "I am java.",
                 "Hello!"
         );
-        List<String> receivedLines = HeadUtility.head("head n -5 " + path);
+        List<String> receivedLines = HeadUtility.head("head -5 " + path);
 
         Assertions.assertEquals(expectedLines, receivedLines);
     }
@@ -71,7 +71,7 @@ public class HeadUtilityTest {
                 "I am java.",
                 "Hello!"
         );
-        List<String> receivedLines = HeadUtility.head("head n -3 " + path);
+        List<String> receivedLines = HeadUtility.head("head -n 3 " + path);
 
         Assertions.assertEquals(expectedLines, receivedLines);
     }
@@ -79,13 +79,13 @@ public class HeadUtilityTest {
     @Test
     public void head_testExtractZeroLinesAndGetException() {
         Assertions.assertThrows(IllegalArgumentException.class, () ->
-                HeadUtility.head("head n -0 " + path));
+                HeadUtility.head("head -n 0 " + path));
     }
 
     @Test
     public void head_testExtractMissingFileAndGetException() {
         Assertions.assertThrows(IllegalArgumentException.class, () ->
-                HeadUtility.head("head n -10 missingFile.txt"));
+                HeadUtility.head("head -10 missingFile.txt"));
     }
 
     public void writeToFile(String content) throws IOException {

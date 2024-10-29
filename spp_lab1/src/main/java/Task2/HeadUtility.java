@@ -42,16 +42,22 @@ public class HeadUtility {
             throw new IllegalArgumentException("Invalid command: " + command + ", utility name - head");
         }
 
-        Pattern utilityPattern = Pattern.compile("^head *n? +-([1-9][0-9]*) (.+)$");
+        Pattern utilityPattern = Pattern.compile("^head *(-n)? +(-?[1-9][0-9]*) (.+)$");
         Matcher matcher = utilityPattern.matcher(command);
         if (matcher.matches()) {
-            linesCount = Integer.parseInt(matcher.group(1));
-            filePath = Paths.get(matcher.group(2));
+            if (matcher.group(1) == null)
+                linesCount = - Integer.parseInt(matcher.group(2));
+            else
+                linesCount = Integer.parseInt(matcher.group(2));
+            if (linesCount < 0)
+                throw new IllegalArgumentException("Invalid command: " + command +
+                        ", utility example: head [-n] 20 app.log");
+            filePath = Paths.get(matcher.group(3));
             if (!Files.isReadable(filePath))
                 throw new IllegalArgumentException("Invalid file: " + filePath);
         } else {
             throw new IllegalArgumentException("Invalid command: " + command +
-                    ", utility example: head [n] -20 app.log");
+                    ", utility example: head [-n] 20 app.log");
         }
     }
 
@@ -59,8 +65,6 @@ public class HeadUtility {
         try (Stream<String> lines = Files.lines(filePath)) {
             return lines.limit(linesCount).toList();
         } catch (IOException e) {
-            // not thrown
-            // isCommandValid() checks the file for readability
             return Collections.emptyList();
         }
     }
